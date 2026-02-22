@@ -5,567 +5,259 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Wedding Countdown">
 <title>Wedding Countdown</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --font-display: 'Cormorant Garamond', Georgia, serif;
-    --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
-    --bg: #fdf9f7;
-    --bg2: #f8f3f0;
-    --card: #ffffff;
-    --border: #f0e8e4;
-    --text: #4a3f3a;
-    --muted: #9a8e88;
-    --light: #bfb0a6;
-    --accent: #c9a89a;
-    --track: #f2ece8;
-    --rose: #c27a8a;
-    --dusty: #7a9bb5;
-    --mauve: #a688a0;
-    --warm: #cc9966;
+    --fd: 'Cormorant Garamond', Georgia, serif;
+    --fb: 'DM Sans', 'Helvetica Neue', sans-serif;
+    --bg: #fdf9f7; --bg2: #f8f3f0;
+    --card: #ffffff; --border: #f0e8e4;
+    --text: #4a3f3a; --muted: #9a8e88; --light: #bfb0a6;
+    --accent: #c9a89a; --track: #f2ece8;
+    --rose: #c27a8a; --dusty: #7a9bb5; --mauve: #a688a0; --warm: #cc9966;
     --safe-b: env(safe-area-inset-bottom, 0px);
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { -webkit-text-size-adjust: 100%; }
   body {
-    font-family: var(--font-body);
-    background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
-    color: var(--text);
-    min-height: 100dvh;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
+    font-family: var(--fb); background: linear-gradient(180deg, var(--bg), var(--bg2));
+    color: var(--text); min-height: 100dvh; -webkit-font-smoothing: antialiased;
   }
-  .container {
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 24px 18px calc(24px + var(--safe-b));
-  }
-  @media (min-width: 768px) {
-    .container { max-width: 560px; padding: 40px 28px 48px; }
-  }
+  .ctr { max-width: 520px; margin: 0 auto; padding: 24px 18px calc(24px + var(--safe-b)); }
+  @media (min-width: 768px) { .ctr { max-width: 560px; padding: 40px 28px 48px; } }
 
-  /* Animations */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes cardPop {
-    0% { transform: scale(1); }
-    40% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-  }
-  .fade-up { animation: fadeUp 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.1s; }
-  .d3 { animation-delay: 0.15s; } .d4 { animation-delay: 0.2s; }
-  .d5 { animation-delay: 0.25s; } .d6 { animation-delay: 0.3s; }
-  .d7 { animation-delay: 0.35s; } .d8 { animation-delay: 0.4s; }
-  .card-pop { animation: cardPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes cardPop { 0%{transform:scale(1)} 40%{transform:scale(1.03)} 100%{transform:scale(1)} }
+  @keyframes heartbeat { 0%,100%{transform:scale(1)} 14%{transform:scale(1.15)} 28%{transform:scale(1)} 42%{transform:scale(1.1)} 56%{transform:scale(1)} }
+  .fu { animation: fadeUp .55s cubic-bezier(.22,.61,.36,1) both; }
+  .d1{animation-delay:.05s} .d2{animation-delay:.1s} .d3{animation-delay:.15s}
+  .d4{animation-delay:.2s} .d5{animation-delay:.25s} .d6{animation-delay:.3s}
+  .d7{animation-delay:.35s}
+  .cpop { animation: cardPop .45s cubic-bezier(.34,1.56,.64,1); }
 
-  /* Header */
-  .header { text-align: center; margin-bottom: 30px; }
-  .header .kicker {
-    font-family: var(--font-body); font-size: 11px; color: var(--light);
-    font-weight: 600; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px;
-  }
-  .header h1 {
-    font-family: var(--font-display); font-size: 38px; font-weight: 300;
-    color: var(--text); letter-spacing: -0.5px; line-height: 1.05; margin: 0;
-  }
-  @media (min-width: 768px) { .header h1 { font-size: 46px; } }
-  .header .divider {
-    width: 40px; height: 1.5px; margin: 14px auto;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .header .stats { font-size: 12px; color: var(--light); letter-spacing: 0.5px; }
+  .hdr { text-align:center; margin-bottom:30px; }
+  .hdr .kick { font-size:11px; color:var(--light); font-weight:600; letter-spacing:3px; text-transform:uppercase; margin-bottom:8px; }
+  .hdr h1 { font-family:var(--fd); font-size:38px; font-weight:300; letter-spacing:-.5px; line-height:1.05; }
+  @media (min-width:768px) { .hdr h1 { font-size:46px; } }
+  .hdr .dv { width:40px; height:1.5px; margin:14px auto; background:linear-gradient(90deg,transparent,var(--accent),transparent); }
+  .hdr .st { font-size:12px; color:var(--light); letter-spacing:.5px; }
 
-  /* Hero Cards */
-  .hero-row { display: flex; gap: 12px; margin-bottom: 24px; }
-  .hero-card {
-    flex: 1; padding: 20px 16px; border-radius: 16px;
-    position: relative; overflow: hidden;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
-  }
-  .hero-card .label {
-    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-    font-weight: 600; margin-bottom: 8px;
-  }
-  .hero-card .big-num {
-    font-family: var(--font-display); font-size: 36px; font-weight: 300;
-    line-height: 1; margin-bottom: 4px;
-    transition: color 0.4s ease;
-  }
-  @media (min-width: 768px) { .hero-card .big-num { font-size: 42px; } }
-  .hero-card .sub { font-size: 12px; }
-  .hero-dark {
-    background: linear-gradient(135deg, #6b5a6e, #7d6878);
-    color: #fff; box-shadow: 0 6px 24px rgba(107,90,110,0.2);
-  }
-  .hero-dark .label { color: #dcc8d8; }
-  .hero-dark .sub { color: #bfadb8; }
-  .hero-dark .orb {
-    position: absolute; top: -30px; right: -30px; width: 100px; height: 100px;
-    border-radius: 50%; background: rgba(220,200,216,0.15);
-  }
-  .hero-light {
-    background: var(--card); border: 1px solid var(--border);
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  }
-  .hero-light .label { color: var(--light); }
-  .hero-light .sub { color: var(--muted); }
-  .deficit-bar {
-    height: 3px; border-radius: 2px; background: var(--track);
-    overflow: hidden; margin-top: 10px;
-  }
-  .deficit-bar-fill {
-    height: 100%; border-radius: 2px;
-    transition: width 0.5s cubic-bezier(0.25,0.46,0.45,0.94), background 0.4s ease;
-  }
+  .hero { display:flex; gap:12px; margin-bottom:24px; }
+  .hc { flex:1; padding:20px 16px; border-radius:16px; position:relative; overflow:hidden;
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s ease; }
+  .hc .lb { font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:600; margin-bottom:8px; }
+  .hc .bn { font-family:var(--fd); font-size:36px; font-weight:300; line-height:1; margin-bottom:4px; transition:color .4s ease; }
+  @media (min-width:768px) { .hc .bn { font-size:42px; } }
+  .hc .sb { font-size:12px; }
+  .hc-d { background:linear-gradient(135deg,#6b5a6e,#7d6878); color:#fff; box-shadow:0 6px 24px rgba(107,90,110,.2); }
+  .hc-d .lb { color:#dcc8d8; } .hc-d .sb { color:#bfadb8; }
+  .hc-d .orb { position:absolute; top:-30px; right:-30px; width:100px; height:100px; border-radius:50%; background:rgba(220,200,216,.15); }
+  .hc-l { background:var(--card); border:1px solid var(--border); box-shadow:0 2px 12px rgba(0,0,0,.04); }
+  .hc-l .lb { color:var(--light); } .hc-l .sb { color:var(--muted); }
+  .dbar { height:3px; border-radius:2px; background:var(--track); overflow:hidden; margin-top:10px; }
+  .dbar-f { height:100%; border-radius:2px; transition: width .5s cubic-bezier(.25,.46,.45,.94), background .4s ease; }
 
-  /* Warnings */
-  .warning {
-    background: #fdf3ee; border: 1px solid #f0ddd0; border-radius: 12px;
-    padding: 12px 16px; margin-bottom: 14px; font-size: 13px; color: #c0885e;
-    animation: fadeUp 0.35s ease both;
-  }
+  .warn { background:#fdf3ee; border:1px solid #f0ddd0; border-radius:12px;
+    padding:12px 16px; margin-bottom:14px; font-size:13px; color:#c0885e; animation:fadeUp .35s ease both; }
 
-  /* Sections */
-  .section {
-    background: var(--card); border-radius: 18px; padding: 22px 20px 18px;
-    border: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.03);
-    margin-bottom: 14px;
-  }
-  .section-title {
-    font-family: var(--font-display); font-size: 20px; font-weight: 400;
-    color: var(--text); margin-bottom: 18px; letter-spacing: -0.3px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-title .icon { font-size: 14px; color: var(--accent); }
+  .sec { background:var(--card); border-radius:18px; padding:22px 20px 18px;
+    border:1px solid var(--border); box-shadow:0 2px 12px rgba(0,0,0,.03); margin-bottom:14px; }
+  .stitle { font-family:var(--fd); font-size:20px; font-weight:400; color:var(--text);
+    margin-bottom:18px; letter-spacing:-.3px; display:flex; align-items:center; gap:8px; }
+  .stitle .ic { font-size:14px; color:var(--accent); }
 
-  /* Sliders — fixed alignment */
-  .slider-group { margin-bottom: 20px; }
-  .slider-header {
-    display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;
+  .info-btn {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border);
+    background:var(--track); color:var(--muted); font-size:11px; font-weight:700;
+    font-family:var(--fb); cursor:pointer; margin-left:auto; flex-shrink:0;
+    transition: all .25s ease; -webkit-tap-highlight-color:transparent;
+    line-height:1; padding:0;
   }
-  .slider-label { font-size: 13px; color: var(--muted); font-weight: 500; letter-spacing: 0.3px; }
-  .slider-value {
-    font-family: var(--font-display); font-size: 22px; font-weight: 600;
-    transition: color 0.3s ease;
-  }
-  .slider-value .unit { font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 2px; }
+  .info-btn:hover, .info-btn:active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .info-btn-sm { width:18px; height:18px; font-size:9px; margin-left:6px; }
 
-  .slider-wrapper {
-    position: relative;
-    height: 30px;
-    display: flex;
-    align-items: center;
+  .popover-overlay {
+    position:fixed; inset:0; z-index:999; background:rgba(74,63,58,.3);
+    backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    animation: fadeIn .2s ease both; touch-action:none;
   }
-  .slider-track {
-    position: absolute;
-    left: 0; right: 0;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--track);
-    pointer-events: none;
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  @keyframes slideUp2 { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .popover {
+    background:#fff; border-radius:16px; padding:24px; max-width:340px; width:100%;
+    box-shadow:0 16px 48px rgba(0,0,0,.12); animation: slideUp2 .25s cubic-bezier(.22,.61,.36,1) both;
   }
-  .slider-fill {
-    position: absolute; left: 0; top: 0; height: 100%; border-radius: 2px;
-    transition: width 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+  .popover .pt { font-family:var(--fd); font-size:22px; font-weight:500; margin-bottom:8px; color:var(--text); }
+  .popover .pb { font-size:13px; line-height:1.65; color:var(--muted); }
+  .popover .pc {
+    display:block; margin:16px auto 0; padding:8px 24px; border:none; border-radius:10px;
+    background:var(--track); color:var(--text); font-family:var(--fb); font-size:13px;
+    font-weight:600; cursor:pointer; transition:all .2s ease;
   }
+  .popover .pc:active { background:var(--accent); color:#fff; }
+
+  .sg { margin-bottom:20px; }
+  .sh { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .sl { font-size:13px; color:var(--muted); font-weight:500; letter-spacing:.3px; }
+  .sv { font-family:var(--fd); font-size:22px; font-weight:600; transition:color .3s ease; }
+  .sv .u { font-size:13px; font-weight:400; color:var(--muted); margin-left:2px; }
+
   input[type="range"] {
-    -webkit-appearance: none; appearance: none;
-    width: 100%;
-    height: 30px;
-    background: transparent;
-    cursor: pointer;
-    touch-action: none;
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    padding: 0;
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:4px; border-radius:2px;
+    outline:none; cursor:pointer; touch-action:none;
   }
   input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 24px; height: 24px; border-radius: 50%;
-    background: white;
-    border: 2.5px solid var(--thumb-color, #aaa);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.12), 0 0 0 3px rgba(0,0,0,0.03);
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+    -webkit-appearance:none;
+    width:22px; height:22px; border-radius:50%;
+    background:#fff; border:2.5px solid var(--tc, #aaa);
+    box-shadow:0 1px 5px rgba(0,0,0,.1), 0 0 0 3px rgba(0,0,0,.03);
+    transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s ease;
   }
   input[type="range"]::-webkit-slider-thumb:active {
-    transform: scale(1.15);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.18), 0 0 0 5px rgba(0,0,0,0.05);
+    transform:scale(1.2);
+    box-shadow:0 2px 10px rgba(0,0,0,.18), 0 0 0 5px rgba(0,0,0,.05);
   }
-  input[type="range"]::-webkit-slider-runnable-track {
-    height: 4px; border-radius: 2px; background: transparent;
+  input[type="range"]::-webkit-slider-runnable-track { height:4px; border-radius:2px; background:transparent; }
+  input[type="range"]::-moz-range-thumb {
+    width:20px; height:20px; border-radius:50%; background:#fff;
+    border:2.5px solid var(--tc, #aaa); box-shadow:0 1px 5px rgba(0,0,0,.1);
   }
-  .slider-limits {
-    display: flex; justify-content: space-between; font-size: 11px; color: #c8beb8;
-    margin-top: 4px;
-  }
+  input[type="range"]::-moz-range-track { height:4px; border-radius:2px; background:transparent; }
+  .slim { display:flex; justify-content:space-between; font-size:11px; color:#c8beb8; margin-top:6px; }
 
-  /* Info pill */
-  .info-pill {
-    font-size: 12px; color: var(--muted); background: var(--track);
-    border-radius: 10px; padding: 10px 14px;
-    display: flex; justify-content: space-between;
-    transition: all 0.3s ease;
-  }
-  .info-pill strong { transition: color 0.3s ease; }
+  .pill { font-size:12px; color:var(--muted); background:var(--track);
+    border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; transition:all .3s ease; }
+  .pill strong { transition:color .3s ease; }
 
-  /* Activity buttons */
-  .activity-row { display: flex; gap: 8px; }
-  .activity-btn {
-    flex: 1; padding: 14px 8px; border-radius: 12px;
-    border: none; font-family: var(--font-body); font-size: 12px;
-    font-weight: 600; cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    -webkit-tap-highlight-color: transparent;
+  .arow { display:flex; gap:8px; }
+  .abtn {
+    flex:1; padding:14px 8px; border-radius:12px; border:none;
+    font-family:var(--fb); font-size:12px; font-weight:600; cursor:pointer;
+    transition: all .35s cubic-bezier(.34,1.56,.64,1);
+    -webkit-tap-highlight-color:transparent;
   }
-  .activity-btn.active {
-    background: linear-gradient(135deg, #6b5a6e, #7d6878); color: #f8f0f4;
-    transform: scale(1.04); box-shadow: 0 4px 16px rgba(107,90,110,0.25);
-  }
-  .activity-btn:not(.active) {
-    background: var(--card); color: var(--muted);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  }
-  .activity-btn .desc { font-size: 10px; font-weight: 400; opacity: 0.6; margin-top: 3px; line-height: 1.3; }
+  .abtn.on { background:linear-gradient(135deg,#6b5a6e,#7d6878); color:#f8f0f4;
+    transform:scale(1.04); box-shadow:0 4px 16px rgba(107,90,110,.25); }
+  .abtn:not(.on) { background:var(--card); color:var(--muted); box-shadow:0 1px 4px rgba(0,0,0,.05); }
+  .abtn .ds { font-size:10px; font-weight:400; opacity:.6; margin-top:3px; line-height:1.3; }
 
-  /* Breakdown */
-  .breakdown-section { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); font-weight: 600; margin-bottom: 6px; margin-top: 14px; }
-  .breakdown-section:first-child { margin-top: 0; }
-  .bk-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 9px 4px; border-bottom: 1px solid var(--track);
-    transition: background 0.4s ease; border-radius: 4px;
-  }
-  .bk-row .bk-label { font-size: 13px; color: #8a7e78; }
-  .bk-row .bk-val {
-    font-family: var(--font-display); font-size: 16px; font-weight: 600;
-    transition: color 0.3s ease;
-  }
-  .bk-total {
-    display: flex; justify-content: space-between; padding: 12px 4px;
-    border-bottom: 2px solid var(--text); margin-bottom: 14px;
-  }
-  .bk-total span { font-family: var(--font-display); font-size: 16px; font-weight: 600; }
-  .bk-total .bk-total-val { font-size: 18px; }
-  .bk-result {
-    display: flex; justify-content: space-between; align-items: baseline; padding: 14px 4px;
-  }
-  .bk-result .bk-result-label { font-family: var(--font-display); font-size: 18px; font-weight: 500; }
-  .bk-result .bk-result-val {
-    font-family: var(--font-display); font-size: 28px; font-weight: 600;
-    transition: color 0.4s ease;
-  }
-  .bk-result .bk-result-unit { font-size: 14px; color: var(--muted); font-weight: 400; }
-  .bk-days { display: flex; justify-content: space-between; padding: 4px 4px 0; color: var(--muted); font-size: 13px; }
-  .bk-days .bk-days-val { font-family: var(--font-display); font-weight: 500; }
+  .bks { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--light); font-weight:600; margin-bottom:6px; margin-top:14px; }
+  .bk { display:flex; justify-content:space-between; align-items:center;
+    padding:9px 4px; border-bottom:1px solid var(--track); border-radius:4px; }
+  .bk .bkl { font-size:13px; color:#8a7e78; display:flex; align-items:center; }
+  .bk .bkv { font-family:var(--fd); font-size:16px; font-weight:600; transition:color .3s ease; }
+  .bkt { display:flex; justify-content:space-between; padding:12px 4px;
+    border-bottom:2px solid var(--text); margin-bottom:14px; }
+  .bkt span { font-family:var(--fd); font-size:16px; font-weight:600; }
+  .bkt .bktv { font-size:18px; }
+  .bkr { display:flex; justify-content:space-between; align-items:baseline; padding:14px 4px; }
+  .bkr .bkrl { font-family:var(--fd); font-size:18px; font-weight:500; }
+  .bkr .bkrv { font-family:var(--fd); font-size:28px; font-weight:600; transition:color .4s ease; }
+  .bkr .bkru { font-size:14px; color:var(--muted); font-weight:400; }
+  .bkd { display:flex; justify-content:space-between; padding:4px 4px 0; color:var(--muted); font-size:13px; }
+  .bkd .bkdv { font-family:var(--fd); font-weight:500; }
 
-  /* Footer */
-  .footer {
-    text-align: center; font-size: 11px; color: var(--light); line-height: 1.7;
-    max-width: 380px; margin: 8px auto 0;
-  }
-  .footer .foot-divider { width: 30px; height: 1px; background: var(--border); margin: 0 auto 12px; }
-
-  /* Dad footer */
-  .dad-footer {
-    text-align: center;
-    margin-top: 32px;
-    padding-bottom: 8px;
-    animation: fadeUp 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s both;
-  }
-  .dad-footer .dad-divider {
-    width: 60px; height: 1px; margin: 0 auto 16px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  }
-  .dad-footer .dad-text {
-    font-family: var(--font-display);
-    font-size: 16px;
-    font-weight: 400;
-    font-style: italic;
-    color: var(--accent);
-    letter-spacing: 0.5px;
-  }
-  .dad-footer .dad-heart {
-    display: inline-block;
-    font-style: normal;
-    font-size: 14px;
-    animation: heartbeat 2s ease-in-out infinite;
-  }
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    14% { transform: scale(1.15); }
-    28% { transform: scale(1); }
-    42% { transform: scale(1.1); }
-    56% { transform: scale(1); }
-  }
+  .ftr { text-align:center; font-size:11px; color:var(--light); line-height:1.7;
+    max-width:380px; margin:8px auto 0; }
+  .ftr .fdv { width:30px; height:1px; background:var(--border); margin:0 auto 12px; }
+  .dad { text-align:center; margin-top:32px; padding-bottom:8px; animation:fadeUp .55s cubic-bezier(.22,.61,.36,1) .5s both; }
+  .dad .ddv { width:60px; height:1px; margin:0 auto 16px; background:linear-gradient(90deg,transparent,var(--accent),transparent); }
+  .dad .dtxt { font-family:var(--fd); font-size:16px; font-weight:400; font-style:italic; color:var(--accent); letter-spacing:.5px; }
+  .dad .dhrt { display:inline-block; font-style:normal; font-size:14px; animation:heartbeat 2s ease-in-out infinite; }
 </style>
 </head>
 <body>
-<div class="container" id="app">
-
-  <!-- Header -->
-  <div class="header fade-up">
-    <div class="kicker"><span id="daysLeft">11</span> days until the wedding</div>
+<div class="ctr" id="app">
+  <div class="hdr fu">
+    <div class="kick">11 days until the wedding</div>
     <h1>The Countdown</h1>
-    <div class="divider"></div>
-    <div class="stats">51.5 kg · 159 cm · 19 years</div>
+    <div class="dv"></div>
+    <div class="st">51.5 kg &middot; 159 cm &middot; 19 years</div>
   </div>
-
-  <!-- Hero Cards -->
-  <div class="hero-row fade-up d1">
-    <div class="hero-card hero-dark" id="lossCard">
+  <div class="hero fu d1">
+    <div class="hc hc-d" id="lossCard">
       <div class="orb"></div>
-      <div class="label">Projected Loss</div>
-      <div class="big-num" id="lossNum">—</div>
-      <div class="sub" id="lossSub"></div>
+      <div class="lb">Projected Loss</div>
+      <div class="bn" id="lossNum">&mdash;</div>
+      <div class="sb" id="lossSub"></div>
     </div>
-    <div class="hero-card hero-light">
-      <div class="label">Daily Deficit</div>
-      <div class="big-num" id="defNum" style="color: var(--text);">—</div>
-      <div class="sub" id="defSub">kcal / day</div>
-      <div class="deficit-bar"><div class="deficit-bar-fill" id="defBar"></div></div>
+    <div class="hc hc-l">
+      <div class="lb">Daily Deficit</div>
+      <div class="bn" id="defNum" style="color:var(--text)">&mdash;</div>
+      <div class="sb">kcal / day</div>
+      <div class="dbar"><div class="dbar-f" id="defBar"></div></div>
     </div>
   </div>
-
-  <!-- Warnings -->
   <div id="warnings"></div>
-
-  <!-- Calories In -->
-  <div class="section fade-up d2">
-    <div class="section-title"><span class="icon">○</span> Calories In</div>
-    <div class="slider-group" id="sg-cals"></div>
+  <div class="sec fu d2">
+    <div class="stitle"><span class="ic">&cir;</span> Calories In<button class="info-btn" onclick="showInfo('cals')">i</button></div>
+    <div class="sg" id="sg-cals"></div>
   </div>
-
-  <!-- Cardio -->
-  <div class="section fade-up d3">
-    <div class="section-title"><span class="icon">◇</span> Cardio — Incline Treadmill</div>
-    <div class="slider-group" id="sg-dur"></div>
-    <div class="slider-group" id="sg-speed"></div>
-    <div class="slider-group" id="sg-incline"></div>
-    <div class="info-pill" id="cardio-pill"></div>
+  <div class="sec fu d3">
+    <div class="stitle"><span class="ic">&loz;</span> Cardio &mdash; Incline Treadmill<button class="info-btn" onclick="showInfo('cardio')">i</button></div>
+    <div class="sg" id="sg-dur"></div>
+    <div class="sg" id="sg-speed"></div>
+    <div class="sg" id="sg-incline"></div>
+    <div class="pill" id="cardio-pill"></div>
   </div>
-
-  <!-- Strength -->
-  <div class="section fade-up d4">
-    <div class="section-title"><span class="icon">△</span> Strength Training — Push · Pull · Legs</div>
-    <div class="slider-group" id="sg-str"></div>
-    <div class="info-pill" id="str-pill"></div>
+  <div class="sec fu d4">
+    <div class="stitle"><span class="ic">&triangle;</span> Strength Training &mdash; Push &middot; Pull &middot; Legs<button class="info-btn" onclick="showInfo('str')">i</button></div>
+    <div class="sg" id="sg-str"></div>
+    <div class="pill" id="str-pill"></div>
   </div>
-
-  <!-- Activity Level -->
-  <div class="section fade-up d5">
-    <div class="section-title"><span class="icon">◎</span> Baseline Activity</div>
-    <div class="activity-row" id="activityBtns"></div>
+  <div class="sec fu d5">
+    <div class="stitle"><span class="ic">&ofcir;</span> Baseline Activity<button class="info-btn" onclick="showInfo('activity')">i</button></div>
+    <div class="arow" id="actBtns"></div>
   </div>
-
-  <!-- Breakdown -->
-  <div class="section fade-up d6" id="breakdown"></div>
-
-  <!-- Technical Footer -->
-  <div class="footer fade-up d7">
-    <div class="foot-divider"></div>
-    <span id="footerText"></span>
-  </div>
-
-  <!-- Dad Footer -->
-  <div class="dad-footer">
-    <div class="dad-divider"></div>
-    <div class="dad-text">Made with <span class="dad-heart">❤️</span> by Dad</div>
-  </div>
-
+  <div class="sec fu d6" id="breakdown"></div>
+  <div class="ftr fu d7"><div class="fdv"></div><span id="ftrText"></span></div>
+  <div class="dad"><div class="ddv"></div><div class="dtxt">Made with <span class="dhrt">&#10084;&#65039;</span> by Dad</div></div>
 </div>
-
+<div id="popRoot"></div>
 <script>
-/* ─── State ─── */
-const state = {
-  cardioMin: 30, cardioSpeed: 5.5, cardioIncline: 12,
-  strengthMin: 20, dailyCals: 1400, activityLevel: 1.2,
+var INFO={
+  cals:{t:'Calories In',b:'The total energy from all food and drink you consume each day. To lose weight, this number needs to be lower than your total calories out. A safe minimum for most people is around 1,200 kcal/day \u2014 going lower risks fatigue, muscle loss, and nutrient deficiencies.'},
+  cardio:{t:'Incline Treadmill',b:'Walking on an incline dramatically increases calorie burn compared to flat walking \u2014 a 12% incline roughly doubles the effort. The burn rate uses ACSM metabolic equations which factor in your weight, speed, and grade. Below 6 kph counts as walking; above switches to a running formula.'},
+  str:{t:'Strength Training',b:'A Push-Pull-Legs split works different muscle groups each session: push (chest, shoulders, triceps), pull (back, biceps), and legs (quads, hamstrings, glutes). Strength training burns fewer calories per minute than cardio but helps preserve muscle during a deficit \u2014 which keeps your metabolism healthy and gives a toned look.'},
+  activity:{t:'Baseline Activity Level',b:'This multiplier adjusts your BMR to estimate total daily energy expenditure from everyday movement \u2014 not including dedicated exercise.<br><br><b>Sedentary (\u00d71.2)</b> \u2014 Desk job, mostly sitting<br><b>Light (\u00d71.375)</b> \u2014 Some walking, light daily tasks<br><b>Moderate (\u00d71.55)</b> \u2014 On your feet often, active commute'},
+  bmr:{t:'BMR \u2014 Basal Metabolic Rate',b:'The calories your body burns just to stay alive at complete rest \u2014 breathing, circulation, cell repair. Calculated using the Mifflin-St Jeor equation based on your weight, height, age, and sex. This is the absolute minimum your body needs.'},
+  tdee:{t:'TDEE \u2014 Total Daily Energy Expenditure',b:'Your BMR multiplied by your activity level. This estimates how many calories you burn in a normal day through basic movement and daily tasks \u2014 before any dedicated exercise is added on top.'}
 };
-const P = { weight: 51.5, heightCm: 158.75, age: 19, days: 11 };
-const CALKG = 7700;
+function showInfo(k){var d=INFO[k];if(!d)return;document.getElementById('popRoot').innerHTML='<div class="popover-overlay" id="popOv" onclick="closeInfo(event)"><div class="popover" onclick="event.stopPropagation()"><div class="pt">'+d.t+'</div><div class="pb">'+d.b+'</div><button class="pc" onclick="closeInfo()">Got it</button></div></div>';}
+function closeInfo(e){if(e&&e.target&&e.target.id!=='popOv')return;document.getElementById('popRoot').innerHTML='';}
 
-/* ─── Calc ─── */
-function bmr() { return 10*P.weight + 6.25*P.heightCm - 5*P.age - 161; }
-function cpmCardio(s, inc) {
-  const mpm = (s*1000)/60, g = inc/100;
-  const vo2 = mpm < 100 ? 3.5+0.1*mpm+1.8*mpm*g : 3.5+0.2*mpm+0.9*mpm*g;
-  return (vo2*P.weight)/200;
-}
-function cpmStr() { return 0.08*P.weight; }
+var S={cardioMin:30,cardioSpeed:5.5,cardioIncline:12,strengthMin:20,dailyCals:1400,activityLevel:1.2};
+var P={weight:51.5,heightCm:158.75,age:19,days:11},CK=7700;
+function bmr(){return 10*P.weight+6.25*P.heightCm-5*P.age-161;}
+function cpmC(s,i){var m=(s*1000)/60,g=i/100;var v=m<100?3.5+.1*m+1.8*m*g:3.5+.2*m+.9*m*g;return(v*P.weight)/200;}
+function cpmS(){return .08*P.weight;}
+function calc(){var b=bmr(),t=b*S.activityLevel,cp=cpmC(S.cardioSpeed,S.cardioIncline),xC=S.cardioMin*cp,sp=cpmS(),xS=S.strengthMin*sp,tO=t+xC+xS,df=tO-S.dailyCals,tD=df*P.days,ls=tD/CK;return{bmr:b,tdee:t,cpm:cp,xC:xC,spm:sp,xS:xS,tO:tO,df:df,tD:tD,ls:ls,fn:P.weight-ls};}
 
-function calc() {
-  const b = bmr(), t = b * state.activityLevel;
-  const cpm = cpmCardio(state.cardioSpeed, state.cardioIncline);
-  const exC = state.cardioMin * cpm;
-  const spm = cpmStr(), exS = state.strengthMin * spm;
-  const totalOut = t + exC + exS;
-  const def = totalOut - state.dailyCals;
-  const totalDef = def * P.days;
-  const loss = totalDef / CALKG;
-  return { bmr: b, tdee: t, cpm, exC, spm, exS, totalOut, def, totalDef, loss, final: P.weight - loss };
-}
+var AT={},AC={},AR={};
+function an(id,tg,dc,pr,sf){pr=pr||'';sf=sf||'';dc=dc||0;if(AC[id]===undefined)AC[id]=tg;AT[id]={t:tg,d:dc,p:pr,s:sf};if(AR[id])return;var fr=AC[id],st=performance.now();function tk(nw){var p=Math.min((nw-st)/380,1),e=1-Math.pow(1-p,3),v=fr+(AT[id].t-fr)*e;AC[id]=v;var el=document.getElementById(id);if(el)el.textContent=AT[id].p+(AT[id].d>0?v.toFixed(AT[id].d):Math.round(v))+AT[id].s;if(p<1)AR[id]=requestAnimationFrame(tk);else{delete AR[id];AC[id]=AT[id].t;}}AR[id]=requestAnimationFrame(tk);}
 
-/* ─── Animated numbers ─── */
-const animTargets = {};
-const animCurrent = {};
-const animRAF = {};
+function mkS(cid,o){var c=document.getElementById(cid),col=o.color;c.innerHTML='<div class="sh"><span class="sl">'+o.label+'</span><span class="sv" style="color:'+col+'"><span id="sv-'+o.key+'">'+(o.dec>0?S[o.key].toFixed(o.dec):S[o.key])+'</span><span class="u">'+o.unit+'</span></span></div><input type="range" id="sr-'+o.key+'" min="'+o.min+'" max="'+o.max+'" step="'+o.step+'" value="'+S[o.key]+'" style="--tc:'+col+'"><div class="slim"><span>'+o.min+'</span><span>'+o.max+'</span></div>';var inp=document.getElementById('sr-'+o.key);function pt(){var p=((S[o.key]-o.min)/(o.max-o.min))*100;inp.style.background='linear-gradient(to right,'+col+' '+p+'%, var(--track) '+p+'%)';}pt();inp.addEventListener('input',function(e){S[o.key]=Number(e.target.value);document.getElementById('sv-'+o.key).textContent=o.dec>0?S[o.key].toFixed(o.dec):S[o.key];pt();render();});}
 
-function animateTo(id, target, dec = 0, prefix = '', suffix = '') {
-  const key = id;
-  if (animCurrent[key] === undefined) animCurrent[key] = target;
-  animTargets[key] = { target, dec, prefix, suffix };
-  if (animRAF[key]) return;
-  const from = animCurrent[key];
-  const start = performance.now();
-  const dur = 380;
-  function tick(now) {
-    const t = Math.min((now - start) / dur, 1);
-    const ease = 1 - Math.pow(1 - t, 3);
-    const val = from + (animTargets[key].target - from) * ease;
-    animCurrent[key] = val;
-    const el = document.getElementById(id);
-    if (el) {
-      const d = animTargets[key];
-      el.textContent = d.prefix + (d.dec > 0 ? val.toFixed(d.dec) : Math.round(val)) + d.suffix;
-    }
-    if (t < 1) animRAF[key] = requestAnimationFrame(tick);
-    else { delete animRAF[key]; animCurrent[key] = animTargets[key].target; }
-  }
-  animRAF[key] = requestAnimationFrame(tick);
-}
+function mkA(){var opts=[{v:1.2,l:'Sedentary',d:'Desk job, minimal movement'},{v:1.375,l:'Light',d:'Walking, light daily tasks'},{v:1.55,l:'Moderate',d:'Active job or regular walks'}];var c=document.getElementById('actBtns');c.innerHTML=opts.map(function(o){return'<button class="abtn'+(S.activityLevel===o.v?' on':'')+'" data-v="'+o.v+'">'+o.l+'<div class="ds">'+o.d+'</div></button>';}).join('');c.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){S.activityLevel=Number(b.dataset.v);c.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});render();});});}
 
-/* ─── Slider builder (fixed alignment) ─── */
-function buildSlider(containerId, { label, key, min, max, step, unit, color, dec = 0 }) {
-  const c = document.getElementById(containerId);
-  c.innerHTML = `
-    <div class="slider-header">
-      <span class="slider-label">${label}</span>
-      <span class="slider-value" style="color:${color}">
-        <span id="sv-${key}">${dec > 0 ? state[key].toFixed(dec) : state[key]}</span><span class="unit">${unit}</span>
-      </span>
-    </div>
-    <div class="slider-wrapper">
-      <div class="slider-track"><div class="slider-fill" id="sf-${key}" style="background:${color}"></div></div>
-      <input type="range" min="${min}" max="${max}" step="${step}" value="${state[key]}"
-        style="--thumb-color:${color}" id="sr-${key}">
-    </div>
-    <div class="slider-limits"><span>${min}</span><span>${max}</span></div>
-  `;
-  const inp = document.getElementById(`sr-${key}`);
-  const fill = document.getElementById(`sf-${key}`);
-  const updateFill = () => { fill.style.width = ((state[key] - min) / (max - min) * 100) + '%'; };
-  updateFill();
-  inp.addEventListener('input', e => {
-    state[key] = Number(e.target.value);
-    document.getElementById(`sv-${key}`).textContent = dec > 0 ? state[key].toFixed(dec) : state[key];
-    updateFill();
-    render();
-  });
-}
+var pL=null;
+function render(){var c=calc();an('lossNum',Math.max(c.ls,0),1,'',' kg');var lc=document.getElementById('lossCard');if(pL!==null&&Math.abs(pL-c.ls)>.01){lc.classList.remove('cpop');void lc.offsetWidth;lc.classList.add('cpop');}pL=c.ls;document.getElementById('lossSub').textContent='\u2192 '+Math.max(c.fn,40).toFixed(1)+' kg by March 4';var hi=c.df>1000;an('defNum',Math.max(c.df,0),0);document.getElementById('defNum').style.color=hi?'var(--warm)':c.df>0?'var(--text)':'var(--rose)';var pct=Math.min(Math.max(c.df/1200,0),1)*100;var bar=document.getElementById('defBar');bar.style.width=pct+'%';bar.style.background=hi?'linear-gradient(90deg,var(--accent),var(--warm))':'linear-gradient(90deg,var(--accent),var(--mauve))';var w=document.getElementById('warnings'),wh='';if(S.dailyCals<1200)wh+='<div class="warn">Below 1,200 kcal/day \u2014 risk of fatigue and nutrient gaps.</div>';if(hi)wh+='<div class="warn">Deficit exceeds 1,000 kcal/day \u2014 consider easing back slightly.</div>';w.innerHTML=wh;
+document.getElementById('cardio-pill').innerHTML='<span>Burn rate <strong style="color:var(--dusty)">'+c.cpm.toFixed(1)+' kcal/min</strong></span><span>Session <strong style="color:var(--dusty)">'+Math.round(c.xC)+' kcal</strong></span>';
+document.getElementById('str-pill').innerHTML='<span>Burn rate <strong style="color:var(--mauve)">'+c.spm.toFixed(1)+' kcal/min</strong></span><span>Session <strong style="color:var(--mauve)">'+Math.round(c.xS)+' kcal</strong></span>';
+document.getElementById('breakdown').innerHTML='<div class="stitle" style="margin-bottom:14px;">Daily Breakdown</div><div class="bks">Energy Out</div><div class="bk"><span class="bkl">BMR <button class="info-btn info-btn-sm" onclick="showInfo(\'bmr\')">i</button></span><span class="bkv">'+Math.round(c.bmr)+'</span></div><div class="bk"><span class="bkl">TDEE <button class="info-btn info-btn-sm" onclick="showInfo(\'tdee\')">i</button> <span style="color:var(--light);font-size:11px">(\u00d7 '+S.activityLevel+')</span></span><span class="bkv">'+Math.round(c.tdee)+'</span></div><div class="bk"><span class="bkl">Cardio \u2014 '+S.cardioMin+'m \u00b7 '+S.cardioSpeed+' kph \u00b7 '+S.cardioIncline+'%</span><span class="bkv" style="color:var(--dusty)">'+Math.round(c.xC)+'</span></div><div class="bk"><span class="bkl">Strength \u2014 '+S.strengthMin+'m</span><span class="bkv" style="color:var(--mauve)">'+Math.round(c.xS)+'</span></div><div class="bkt"><span>Total Out</span><span class="bktv">'+Math.round(c.tO)+'</span></div><div class="bks">Energy In</div><div class="bk"><span class="bkl">Food</span><span class="bkv" style="color:var(--rose)">'+S.dailyCals+'</span></div><div class="bkt"><span>Total In</span><span class="bktv" style="color:var(--rose)">'+S.dailyCals+'</span></div><div class="bks">Result</div><div class="bkr"><span class="bkrl">Daily Deficit</span><span class="bkrv" style="color:'+(c.df>0?'var(--text)':'var(--rose)')+'">'+Math.round(c.df)+' <span class="bkru">kcal</span></span></div><div class="bkd"><span>\u00d7 '+P.days+' days</span><span class="bkdv">'+Math.round(c.tD).toLocaleString()+' kcal total</span></div>';
+document.getElementById('ftrText').textContent='Mifflin-St Jeor BMR \u00b7 ACSM treadmill equations adjusted for incline \u00b7 Strength at ~'+c.spm.toFixed(1)+' kcal/min \u00b7 1 kg fat \u2248 7,700 kcal \u00b7 Results vary with intensity and water retention';}
 
-/* ─── Activity buttons ─── */
-function buildActivity() {
-  const opts = [
-    { v: 1.2, l: 'Sedentary', d: 'Desk job, minimal movement' },
-    { v: 1.375, l: 'Light', d: 'Walking, light daily tasks' },
-    { v: 1.55, l: 'Moderate', d: 'Active job or regular walks' },
-  ];
-  const c = document.getElementById('activityBtns');
-  c.innerHTML = opts.map(o => `
-    <button class="activity-btn ${state.activityLevel === o.v ? 'active' : ''}" data-v="${o.v}">
-      ${o.l}<div class="desc">${o.d}</div>
-    </button>
-  `).join('');
-  c.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.activityLevel = Number(btn.dataset.v);
-      c.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      render();
-    });
-  });
-}
-
-/* ─── Render ─── */
-let prevLoss = null;
-function render() {
-  const c = calc();
-
-  // Hero: loss
-  animateTo('lossNum', Math.max(c.loss, 0), 1, '', ' kg');
-  const lossCard = document.getElementById('lossCard');
-  if (prevLoss !== null && Math.abs(prevLoss - c.loss) > 0.01) {
-    lossCard.classList.remove('card-pop');
-    void lossCard.offsetWidth;
-    lossCard.classList.add('card-pop');
-  }
-  prevLoss = c.loss;
-  document.getElementById('lossSub').textContent = '\u2192 ' + Math.max(c.final, 40).toFixed(1) + ' kg by March 4';
-
-  // Hero: deficit
-  const tooHigh = c.def > 1000;
-  animateTo('defNum', Math.max(c.def, 0), 0);
-  const defEl = document.getElementById('defNum');
-  defEl.style.color = tooHigh ? 'var(--warm)' : c.def > 0 ? 'var(--text)' : 'var(--rose)';
-  const pct = Math.min(Math.max(c.def / 1200, 0), 1) * 100;
-  const bar = document.getElementById('defBar');
-  bar.style.width = pct + '%';
-  bar.style.background = tooHigh
-    ? 'linear-gradient(90deg, var(--accent), var(--warm))'
-    : 'linear-gradient(90deg, var(--accent), var(--mauve))';
-
-  // Warnings
-  const w = document.getElementById('warnings');
-  let whtml = '';
-  if (state.dailyCals < 1200) whtml += '<div class="warning">Below 1,200 kcal/day \u2014 risk of fatigue and nutrient gaps.</div>';
-  if (tooHigh) whtml += '<div class="warning">Deficit exceeds 1,000 kcal/day \u2014 consider easing back slightly.</div>';
-  w.innerHTML = whtml;
-
-  // Pills
-  document.getElementById('cardio-pill').innerHTML =
-    '<span>Burn rate <strong style="color:var(--dusty)">' + c.cpm.toFixed(1) + ' kcal/min</strong></span>' +
-    '<span>Session <strong style="color:var(--dusty)">' + Math.round(c.exC) + ' kcal</strong></span>';
-  document.getElementById('str-pill').innerHTML =
-    '<span>Burn rate <strong style="color:var(--mauve)">' + c.spm.toFixed(1) + ' kcal/min</strong></span>' +
-    '<span>Session <strong style="color:var(--mauve)">' + Math.round(c.exS) + ' kcal</strong></span>';
-
-  // Breakdown
-  document.getElementById('breakdown').innerHTML =
-    '<div class="section-title" style="margin-bottom:14px;">Daily Breakdown</div>' +
-    '<div class="breakdown-section">Energy Out</div>' +
-    '<div class="bk-row"><span class="bk-label">BMR</span><span class="bk-val">' + Math.round(c.bmr) + '</span></div>' +
-    '<div class="bk-row"><span class="bk-label">TDEE (\u00d7 ' + state.activityLevel + ')</span><span class="bk-val">' + Math.round(c.tdee) + '</span></div>' +
-    '<div class="bk-row"><span class="bk-label">Cardio \u2014 ' + state.cardioMin + 'm \u00b7 ' + state.cardioSpeed + ' kph \u00b7 ' + state.cardioIncline + '%</span><span class="bk-val" style="color:var(--dusty)">' + Math.round(c.exC) + '</span></div>' +
-    '<div class="bk-row"><span class="bk-label">Strength \u2014 ' + state.strengthMin + 'm</span><span class="bk-val" style="color:var(--mauve)">' + Math.round(c.exS) + '</span></div>' +
-    '<div class="bk-total"><span>Total Out</span><span class="bk-total-val">' + Math.round(c.totalOut) + '</span></div>' +
-    '<div class="breakdown-section">Energy In</div>' +
-    '<div class="bk-row"><span class="bk-label">Food</span><span class="bk-val" style="color:var(--rose)">' + state.dailyCals + '</span></div>' +
-    '<div class="bk-total"><span>Total In</span><span class="bk-total-val" style="color:var(--rose)">' + state.dailyCals + '</span></div>' +
-    '<div class="breakdown-section">Result</div>' +
-    '<div class="bk-result"><span class="bk-result-label">Daily Deficit</span>' +
-    '<span class="bk-result-val" style="color:' + (c.def > 0 ? 'var(--text)' : 'var(--rose)') + '">' +
-    Math.round(c.def) + ' <span class="bk-result-unit">kcal</span></span></div>' +
-    '<div class="bk-days"><span>\u00d7 ' + P.days + ' days</span>' +
-    '<span class="bk-days-val">' + Math.round(c.totalDef).toLocaleString() + ' kcal total</span></div>';
-
-  // Footer
-  document.getElementById('footerText').textContent =
-    'Mifflin-St Jeor BMR \u00b7 ACSM treadmill equations adjusted for incline \u00b7 Strength at ~' + c.spm.toFixed(1) + ' kcal/min \u00b7 1 kg fat \u2248 7,700 kcal \u00b7 Results vary with intensity and water retention';
-}
-
-/* ─── Init ─── */
-buildSlider('sg-cals', { label: 'Daily food intake', key: 'dailyCals', min: 1000, max: 2200, step: 50, unit: ' kcal', color: 'var(--rose)' });
-buildSlider('sg-dur', { label: 'Duration', key: 'cardioMin', min: 0, max: 90, step: 5, unit: ' min', color: 'var(--dusty)' });
-buildSlider('sg-speed', { label: 'Speed', key: 'cardioSpeed', min: 3, max: 12, step: 0.5, unit: ' kph', color: 'var(--dusty)', dec: 1 });
-buildSlider('sg-incline', { label: 'Incline', key: 'cardioIncline', min: 0, max: 15, step: 1, unit: '%', color: 'var(--dusty)' });
-buildSlider('sg-str', { label: 'Duration', key: 'strengthMin', min: 0, max: 60, step: 5, unit: ' min', color: 'var(--mauve)' });
-buildActivity();
-render();
+mkS('sg-cals',{label:'Daily food intake',key:'dailyCals',min:1000,max:2200,step:50,unit:' kcal',color:'var(--rose)'});
+mkS('sg-dur',{label:'Duration',key:'cardioMin',min:0,max:90,step:5,unit:' min',color:'var(--dusty)'});
+mkS('sg-speed',{label:'Speed',key:'cardioSpeed',min:3,max:12,step:.5,unit:' kph',color:'var(--dusty)',dec:1});
+mkS('sg-incline',{label:'Incline',key:'cardioIncline',min:0,max:15,step:1,unit:'%',color:'var(--dusty)'});
+mkS('sg-str',{label:'Duration',key:'strengthMin',min:0,max:60,step:5,unit:' min',color:'var(--mauve)'});
+mkA();render();
 </script>
 </body>
 </html>
